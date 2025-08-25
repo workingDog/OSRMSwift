@@ -65,6 +65,27 @@ public struct OSRMTripResponse: Codable, Identifiable, Sendable {
     }
 }
 
+// MARK: - OSRMNearestResponse
+public struct OSRMNearestResponse: Codable, Identifiable, Sendable {
+    public let id = UUID()
+    
+    public let code: String
+    public let waypoints: [OSRMPoint]
+    
+    enum CodingKeys: String, CodingKey {
+        case code, waypoints
+    }
+    
+    public init(code: String, waypoints: [OSRMPoint]) {
+        self.code = code
+        self.waypoints = waypoints
+    }
+    
+    public var coordinates2D: [CLLocationCoordinate2D] {
+        waypoints.compactMap { $0.coordinates2D }
+    }
+}
+
 // MARK: - OSRMRoute
 public struct OSRMRoute: Codable, Identifiable, Sendable {
     public let id = UUID()

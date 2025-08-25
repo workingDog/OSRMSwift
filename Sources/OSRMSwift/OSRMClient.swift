@@ -103,6 +103,20 @@ public actor OSRMClient {
             }
         }
         
+        // nearest only
+        if request.service == .nearest {
+            queryItems.removeAll()
+
+            let radiuses = request.coordinates.map { $0.radius != nil ? "\($0.radius!)" : "" }.joined(separator: ";")
+            if radiuses.contains(where: { !$0.isWhitespace }) {
+                queryItems.append(URLQueryItem(name: "radiuses", value: radiuses))
+            }
+
+            if let number = request.number {
+                queryItems.append(URLQueryItem(name: "number", value: "\(number)"))
+            }
+        }
+        
         // optional per-coordinate arrays
         let bearings = request.coordinates.map {
             if let bearing = $0.bearing {
@@ -210,4 +224,23 @@ public actor OSRMClient {
         }
     }
     
+    /*
+     * fetch nearest service from the server.
+     * The server OSRMNearestResponse is returned.
+     *
+     * @request the OSRMRequest
+     * @return OSRMNearestResponse?
+     */
+    @MainActor
+    public func fetchNearest(request: OSRMRequest) async throws -> OSRMNearestResponse? {
+        do {
+            let data = try await fetchData(request: request)
+            let response: OSRMNearestResponse = try JSONDecoder().decode(OSRMNearestResponse.self, from: data)
+            return response
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+   
 }

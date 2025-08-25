@@ -33,11 +33,14 @@ public struct OSRMRequest: Codable, Identifiable, Sendable {
     public var snapping: String?     // "default" | "any"
     public var exclude: [String]?    // ["toll", "motorway", "ferry", …]
     
+    // nearest
+    public var number: Int?
+    
     enum CodingKeys: String, CodingKey {
-        case profile, coordinates, version, service, timestamps, steps, geometries, overview, annotations, radiuses, tidy, snapping, exclude, alternatives, continueStraight
+        case profile, coordinates, version, service, timestamps, steps, geometries, overview, annotations, radiuses, tidy, snapping, exclude, alternatives, continueStraight, number
     }
     
-    public init(profile: OSRMProfile, coordinates: [OSRMCoordinate], service: OSRMService, version: String = "v1", steps: Bool, geometries: String = "polyline", overview: String = "simplified", annotations: String? = nil, alternatives: Bool? = nil, continueStraight: Bool? = nil, timestamps: [Int]? = nil, radiuses: [Double]? = nil, tidy: Bool? = nil, snapping: String? = nil, exclude: [String]? = nil) {
+    public init(profile: OSRMProfile, coordinates: [OSRMCoordinate], service: OSRMService, version: String = "v1", steps: Bool = false, geometries: String = "polyline", overview: String = "simplified", annotations: String? = nil, alternatives: Bool? = nil, continueStraight: Bool? = nil, timestamps: [Int]? = nil, radiuses: [Double]? = nil, tidy: Bool? = nil, snapping: String? = nil, exclude: [String]? = nil, number: Int? = nil) {
         self.profile = profile
         self.coordinates = coordinates
         self.service = service
@@ -53,6 +56,7 @@ public struct OSRMRequest: Codable, Identifiable, Sendable {
         self.tidy = tidy
         self.snapping = snapping
         self.exclude = exclude
+        self.number = number
     }
 }
 

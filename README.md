@@ -14,7 +14,7 @@ It delivers map data from **OpenStreetMap** that can:
 
 **OSRMSwift** is a small Swift library to connect to the [OSRM API](https://router.project-osrm.org) server.
         
-**OSRMSwift** is currently for JSON **route**, **trip** and **match** services only.
+**OSRMSwift** is currently for JSON **route**, **trip**, **nearest** and **match** services only.
           
                                                                     
 ### Usage
