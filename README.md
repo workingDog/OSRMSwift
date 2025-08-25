@@ -1,8 +1,6 @@
 # OSRM API Swift client library
 
-[OSRM](https://project-osrm.org/docs/v5.5.1/api/#general-options) 
-
-OSRM (Open Source Routing Machine) is a routing engine made available through an HTTP API.
+[OSRM](https://project-osrm.org/docs/v5.5.1/api/#general-options) (Open Source Routing Machine) is a routing engine made available through an HTTP API.
 
 It delivers map data from **OpenStreetMap** that can:
 
@@ -16,7 +14,7 @@ It delivers map data from **OpenStreetMap** that can:
 
 **OSRMSwift** is a small Swift library to connect to the [OSRM API](https://router.project-osrm.org) server.
         
-**OSRMSwift** is currently for JSON route and match services only.
+**OSRMSwift** is currently for JSON **route** and **match** services only.
           
                                                                     
 ### Usage
