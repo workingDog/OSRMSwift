@@ -2,21 +2,22 @@
 
 [OSRM](https://project-osrm.org/docs/v5.5.1/api/#general-options) (Open Source Routing Machine) is a routing engine made available through an HTTP API.
 
-It delivers map data from **OpenStreetMap** that can:
+It delivers map data from **OpenStreetMap** through various services.
 
-    •    Find the best route (shortest/fastest path) between points
-    •    Get travel times and distances between locations
-    •    Provide turn-by-turn directions for navigation
-    •    Snap GPS traces to roads (map matching)
-    •    Build distance/time matrices (many-to-many travel times)
-    •    Optimize trips (reorder waypoints for shortest round trip)
+**OSRMSwift** is a small Swift library to connect to the [OSRM API](https://router.project-osrm.org) server and returns the response from the various services.
 
+### Services
 
-**OSRMSwift** is a small Swift library to connect to the [OSRM API](https://router.project-osrm.org) server.
-        
-**OSRMSwift** is currently for JSON **route**, **trip**, **nearest** and **match** services only.
-          
-                                                                    
+**Nearest** service -    Snaps a coordinate to the street network and returns the nearest n matches.
+**Route** service -    Finds the fastest route between coordinates in the supplied order.
+**Table** service -    Computes the duration of the fastest route between all pairs of supplied coordinates.
+**Match** service -    Map matching matches/snaps given GPS points to the road network in the most plausible way.
+**Trip** service -    The trip plugin solves the Traveling Salesman Problem using a greedy heuristic (farthest-insertion algorithm). 
+
+Not yet implemented
+**Tile** service -    This service generates Mapbox Vector Tiles that can be viewed with a vector-tile capable slippy-map viewer.
+
+                                                                
 ### Usage
 
 **OSRMSwift** is made easy to use with **SwiftUI**.
