@@ -2,7 +2,8 @@
 
 [OSRM](https://project-osrm.org/docs/v5.5.1/api/#general-options) (Open Source Routing Machine) is a routing engine made available through an HTTP API.
 
-It delivers map data from **OpenStreetMap** through various services.
+It delivers map data from **OpenStreetMap** through various services 
+that lets you calculate the best way to travel from point A to point B.
 
 **OSRMSwift** is a small Swift library to connect to the [OSRM API](https://router.project-osrm.org) server and returns the responses from the various services.
 
@@ -26,8 +27,7 @@ It delivers map data from **OpenStreetMap** through various services.
 Not yet implemented
 
 -    **Tile** 
-
-        This service generates Mapbox Vector Tiles that can be viewed with a vector-tile capable slippy-map viewer.
+         This service generates Mapbox Vector Tiles that can be viewed with a vector-tile capable slippy-map viewer.
 
                                                                 
 ### Usage
@@ -83,7 +83,6 @@ struct ContentView: View {
                     OSRMCoordinate(lat: 52.529407, lon: 13.397634)
                 ],
                 service: .route,
-                version: "v1",
                 steps: true,
                 geometries: "geojson",
                 overview: "full",
