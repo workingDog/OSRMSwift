@@ -46,6 +46,25 @@ public struct OSRMRouteResponse: Codable, Identifiable, Sendable {
     }
 }
 
+// MARK: - OSRMTripResponse
+public struct OSRMTripResponse: Codable, Identifiable, Sendable {
+    public let id = UUID()
+    
+    public let code: String
+    public let trips: [OSRMRoute]
+    public let waypoints: [OSRMPoint?]
+    
+    enum CodingKeys: String, CodingKey {
+        case code, trips, waypoints
+    }
+    
+    public init(code: String, trips: [OSRMRoute], waypoints: [OSRMPoint?]) {
+        self.code = code
+        self.trips = trips
+        self.waypoints = waypoints
+    }
+}
+
 // MARK: - OSRMRoute
 public struct OSRMRoute: Codable, Identifiable, Sendable {
     public let id = UUID()
@@ -241,15 +260,19 @@ public struct OSRMPoint: Codable, Identifiable, Sendable {
     public let distance: Double?
     public let hint: String?
     public let matchingsIndex: Int?
+    
+    // trip
+    public let tripIndex: Int?
 
     enum CodingKeys: String, CodingKey {
         case distance, name, location, hint
         case alternativesCount = "alternatives_count"
         case waypointIndex = "waypoint_index"
         case matchingsIndex = "matchings_index"
+        case tripIndex = "trips_index"
     }
     
-    public init(name: String, location: [Double], alternativesCount: Int? = nil, waypointIndex: Int? = nil, distance: Double? = nil,  hint: String? = nil, matchingsIndex: Int? = nil) {
+    public init(name: String, location: [Double], alternativesCount: Int? = nil, waypointIndex: Int? = nil, distance: Double? = nil,  hint: String? = nil, matchingsIndex: Int? = nil, tripIndex: Int? = nil) {
         self.alternativesCount = alternativesCount
         self.waypointIndex = waypointIndex
         self.distance = distance
@@ -257,6 +280,7 @@ public struct OSRMPoint: Codable, Identifiable, Sendable {
         self.location = location
         self.hint = hint
         self.matchingsIndex = matchingsIndex
+        self.tripIndex = tripIndex
     }
     
     public var coordinates2D: CLLocationCoordinate2D? {

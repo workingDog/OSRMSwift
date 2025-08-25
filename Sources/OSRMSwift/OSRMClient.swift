@@ -191,4 +191,23 @@ public actor OSRMClient {
         }
     }
     
+    /*
+     * fetch trip service from the server.
+     * The server OSRMTripResponse is returned.
+     *
+     * @request the OSRMRequest
+     * @return OSRMTripResponse?
+     */
+    @MainActor
+    public func fetchTrip(request: OSRMRequest) async throws -> OSRMTripResponse? {
+        do {
+            let data = try await fetchData(request: request)
+            let response: OSRMTripResponse = try JSONDecoder().decode(OSRMTripResponse.self, from: data)
+            return response
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
 }
