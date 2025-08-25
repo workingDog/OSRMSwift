@@ -8,25 +8,25 @@ It delivers map data from **OpenStreetMap** through various services.
 
 ### Services
 
-**Route**  
-    -    Finds the fastest route between coordinates in the supplied order.
+-    **Route**  
+        Finds the fastest route between coordinates in the supplied order.
 
-**Nearest**  
-    -    Snaps a coordinate to the street network and returns the nearest n matches.
+-    **Nearest**  
+        Snaps a coordinate to the street network and returns the nearest n matches.
 
-**Table**  
-    -    Computes the duration of the fastest route between all pairs of supplied coordinates.
+-    **Table**  
+        Computes the duration of the fastest route between all pairs of supplied coordinates.
 
-**Match**  
-    -    Map matching matches/snaps given GPS points to the road network in the most plausible way.
+-    **Match**  
+        Map matching matches/snaps given GPS points to the road network in the most plausible way.
 
-**Trip**  
-    -    The trip plugin solves the Traveling Salesman Problem using a greedy heuristic (farthest-insertion algorithm). 
+-    **Trip**  
+        The trip plugin solves the Traveling Salesman Problem using a greedy heuristic (farthest-insertion algorithm). 
 
 Not yet implemented
 
-**Tile** 
-    -    This service generates Mapbox Vector Tiles that can be viewed with a vector-tile capable slippy-map viewer.
+-    **Tile** 
+        This service generates Mapbox Vector Tiles that can be viewed with a vector-tile capable slippy-map viewer.
 
                                                                 
 ### Usage
