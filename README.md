@@ -26,6 +26,7 @@ It delivers map data from **OpenStreetMap** through various services.
 Not yet implemented
 
 -    **Tile** 
+
         This service generates Mapbox Vector Tiles that can be viewed with a vector-tile capable slippy-map viewer.
 
                                                                 
