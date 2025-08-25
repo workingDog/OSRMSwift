@@ -29,9 +29,12 @@ It can be used with the following OS:
 
 #### Examples
 
-[OSRM](https://project-osrm.org/docs/v5.5.1/api/#general-options) data can be accessed through the use of **OSRMClient**, with simple functions.
+[OSRM](https://project-osrm.org/docs/v5.5.1/api/#general-options) data can be accessed with the use of the **OSRMClient**.
 
 ```swift
+import SwiftUI
+import MapKit
+import OSRMSwift
 
 struct ContentView: View {
     let client = OSRMClient()
