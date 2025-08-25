@@ -4,18 +4,29 @@
 
 It delivers map data from **OpenStreetMap** through various services.
 
-**OSRMSwift** is a small Swift library to connect to the [OSRM API](https://router.project-osrm.org) server and returns the response from the various services.
+**OSRMSwift** is a small Swift library to connect to the [OSRM API](https://router.project-osrm.org) server and returns the responses from the various services.
 
 ### Services
 
-**Nearest** service -    Snaps a coordinate to the street network and returns the nearest n matches.
-**Route** service -    Finds the fastest route between coordinates in the supplied order.
-**Table** service -    Computes the duration of the fastest route between all pairs of supplied coordinates.
-**Match** service -    Map matching matches/snaps given GPS points to the road network in the most plausible way.
-**Trip** service -    The trip plugin solves the Traveling Salesman Problem using a greedy heuristic (farthest-insertion algorithm). 
+**Nearest** service 
+    -    Snaps a coordinate to the street network and returns the nearest n matches.
+
+**Route** service 
+    -    Finds the fastest route between coordinates in the supplied order.
+
+**Table** service 
+    -    Computes the duration of the fastest route between all pairs of supplied coordinates.
+
+**Match** service 
+    -    Map matching matches/snaps given GPS points to the road network in the most plausible way.
+
+**Trip** service 
+    -    The trip plugin solves the Traveling Salesman Problem using a greedy heuristic (farthest-insertion algorithm). 
 
 Not yet implemented
-**Tile** service -    This service generates Mapbox Vector Tiles that can be viewed with a vector-tile capable slippy-map viewer.
+
+**Tile** service
+    -    This service generates Mapbox Vector Tiles that can be viewed with a vector-tile capable slippy-map viewer.
 
                                                                 
 ### Usage
