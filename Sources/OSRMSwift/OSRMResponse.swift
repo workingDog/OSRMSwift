@@ -5,7 +5,7 @@
 //  Created by Ringo Wathelet on 2025/08/25.
 //
 import Foundation
-import MapKit
+import CoreLocation
 
 
 // MARK: - OSRMMatchResponse
