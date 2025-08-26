@@ -23,7 +23,7 @@ public struct OSRMQueryMaker {
             case .trip:     getTripQuery(for: request)
             case .nearest:  getNearestQuery(for: request)
             case .table:    getTableQuery(for: request)
-            case .tile:     getGeneralOptions(for: request)  // <-- todo
+            //case .tile:   // <-- todo
         }
 
         // for all services except table

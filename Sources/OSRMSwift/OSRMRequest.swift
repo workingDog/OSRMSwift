@@ -129,5 +129,5 @@ public struct OSRMBearing: Codable, Identifiable, Sendable {
 
 // MARK: - Service
 public enum OSRMService: String, Codable, Sendable {
-    case route, table, nearest, match, trip, tile
+    case route, table, nearest, match, trip
 }
