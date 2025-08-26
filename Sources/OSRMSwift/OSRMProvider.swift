@@ -8,7 +8,7 @@ import Foundation
 import SwiftUI
 
 /*
- * Provides for getting the OSRM API server respoense,
+ * Get the OSRM API server response,
  * based on the particular service of the given OSRMRequest.
  * Update the corresponding observable response for use in SwiftUI.
  *
