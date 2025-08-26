@@ -24,18 +24,14 @@ public struct OSRMQueryMaker {
         }
 
         // for all services except table
-        if request.service != .table {
-            // optional per-coordinate arrays
-            let bearings = request.coordinates.map {
-                if let bearing = $0.bearing {
-                    "\(bearing.value),\(bearing.range)"
-                } else {
-                    ""
-                }
-            }.joined(separator: ";")
-            if bearings.contains(where: { !$0.isWhitespace }) {
-                queryItems.append(URLQueryItem(name: "bearings", value: bearings))
-            }
+        if request.service != .table,
+           request.coordinates.contains(where: { $0.bearing != nil }) {
+            
+            let bearings = request.coordinates
+                .map { $0.bearing.map { "\($0.value),\($0.range)" } ?? "" }
+                .joined(separator: ";")
+
+            queryItems.append(URLQueryItem(name: "bearings", value: bearings))
         }
         
         return queryItems
