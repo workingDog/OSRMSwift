@@ -100,6 +100,63 @@ struct ContentView: View {
 }
 ```
 
+### SwiftUI data model
+
+Using the @Observable data model OSRMProvider
+
+```swift
+
+struct ContentView: View {
+    let osrmProvider = OSRMProvider()
+ 
+    @State private var cameraPosition: MapCameraPosition = .region(MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 52.517037, longitude: 13.388860),
+        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+    ))
+    
+    var body: some View {
+        Map(position: $cameraPosition) {
+            if let response = osrmProvider.routeResponse {
+                ForEach(response.routes) { route in
+                    MapPolyline(coordinates: route.geometry.coordinates2D)
+                        .stroke(.blue, lineWidth: 8)
+                    if let start = route.geometry.coordinates2D.first,
+                       let end = route.geometry.coordinates2D.last{
+                        Marker("Start", coordinate: start)
+                        Marker("End", coordinate: end)
+                    }
+                }
+            }
+        }
+        .task {
+            let request = OSRMRequest(
+                profile: .driving,
+                coordinates: [
+                    OSRMCoordinate(lat: 52.517037, lon: 13.388860,
+                                   bearing: OSRMBearing(value: 90, range: 20),
+                                   radius: 50),
+                    OSRMCoordinate(lat: 52.529407, lon: 13.397634)
+                ],
+                service: .route,
+                version: "v1",
+                steps: true,
+                geometries: "geojson",
+                overview: "full",
+                annotations: "false",
+                alternatives: true,
+                continueStraight: true
+            )
+
+            await osrmProvider.getOSRMResponse(for: request)
+        }
+    }
+}
+```
+
+
+
+
+
 ### Request
 
 The structure of various requests are described at [OSRM](https://project-osrm.org/docs/v5.5.1/api/#general-options) 
