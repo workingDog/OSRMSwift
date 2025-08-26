@@ -34,6 +34,8 @@ public enum APIError: Swift.Error, LocalizedError {
  */
 public actor OSRMClient {
     
+    let queryMaker = OSRMQueryMaker()
+    
     public var sessionManager: URLSession
     public var acceptType = "application/json; charset=utf-8"
     public var contentType = "application/json; charset=utf-8"
@@ -67,7 +69,7 @@ public actor OSRMClient {
         // base path
         guard var components = URLComponents(string: "\(baseurl)/\(request.service.rawValue)/\(request.version)/\(request.profile.rawValue)/\(coords)") else { return Data() }
         
-        let queryItems: [URLQueryItem] = await OSRMQuery().getQueryItems(for: request)
+        let queryItems: [URLQueryItem] = await queryMaker.getQueryItems(for: request)
 
         components.queryItems = queryItems
         

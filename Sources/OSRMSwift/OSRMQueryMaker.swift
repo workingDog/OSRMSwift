@@ -1,5 +1,5 @@
 //
-//  OSRMQuery.swift
+//  OSRMQueryMaker.swift
 //  OSRMSwift
 //
 //  Created by Ringo Wathelet on 2025/08/26.
@@ -10,17 +10,17 @@ import Foundation
  * create an array of URLQueryItem based on the particular service
  * of the given OSRMRequest
  */
-public struct OSRMQuery {
+public struct OSRMQueryMaker {
 
     public func getQueryItems(for request: OSRMRequest) -> [URLQueryItem] {
         
         var queryItems: [URLQueryItem] = switch request.service {
-            case .route: getRouteQuery(for: request)
-            case .match: getMatchQuery(for: request)
-            case .trip: getTripQuery(for: request)
-            case .nearest: getNearestQuery(for: request)
-            case .table: getTableQuery(for: request)
-            case .tile: getGeneralQuery(for: request)  // <-- todo
+            case .route:    getRouteQuery(for: request)
+            case .match:    getMatchQuery(for: request)
+            case .trip:     getTripQuery(for: request)
+            case .nearest:  getNearestQuery(for: request)
+            case .table:    getTableQuery(for: request)
+            case .tile:     getGeneralOptions(for: request)  // <-- todo
         }
 
         // for all services except table
@@ -41,7 +41,7 @@ public struct OSRMQuery {
         return queryItems
     }
 
-    public func getGeneralQuery(for request: OSRMRequest) -> [URLQueryItem] {
+    public func getGeneralOptions(for request: OSRMRequest) -> [URLQueryItem] {
         return [
             URLQueryItem(name: "steps", value: request.steps ? "true" : "false"),
             URLQueryItem(name: "geometries", value: request.geometries),
@@ -51,7 +51,7 @@ public struct OSRMQuery {
     }
     
     public func getRouteQuery(for request: OSRMRequest) -> [URLQueryItem] {
-        var queryItems: [URLQueryItem] = getGeneralQuery(for: request)
+        var queryItems: [URLQueryItem] = getGeneralOptions(for: request)
         
         if let alternatives = request.alternatives {
             queryItems.append(URLQueryItem(name: "alternatives", value: alternatives ? "true" : "false"))
@@ -64,13 +64,13 @@ public struct OSRMQuery {
     }
     
     public func getTripQuery(for request: OSRMRequest) -> [URLQueryItem] {
-        var queryItems: [URLQueryItem] = getGeneralQuery(for: request)
+        var queryItems: [URLQueryItem] = getGeneralOptions(for: request)
         
         return queryItems
     }
     
     public func getMatchQuery(for request: OSRMRequest) -> [URLQueryItem] {
-        var queryItems: [URLQueryItem] = getGeneralQuery(for: request)
+        var queryItems: [URLQueryItem] = getGeneralOptions(for: request)
         
         if let tst = request.timestamps {
             let timestamps = tst.map { "\($0)" }.joined(separator: ";")
