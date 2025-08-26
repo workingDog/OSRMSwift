@@ -27,9 +27,9 @@ public enum APIError: Swift.Error, LocalizedError {
 }
 
 /*
- * a network connection to the OSRM API server
- * info at: https://project-osrm.org/docs/v5.5.1/api/#route-service
- * urlString: http://router.project-osrm.org/route/v1/driving/13.388860,52.517037;13.397634,52.529407;13.428555,52.523219?overview=false
+ * Provides for network connections to the OSRM API server
+ *
+ * info at: https://project-osrm.org/docs/v5.5.1/api/#general-options
  *
  */
 public actor OSRMClient {

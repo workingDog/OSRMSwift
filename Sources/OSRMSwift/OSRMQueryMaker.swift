@@ -7,8 +7,11 @@
 import Foundation
 
 /*
- * create an array of URLQueryItem based on the particular service
- * of the given OSRMRequest
+ * Creates an array of URLQueryItem based on the particular service
+ * of the given OSRMRequest.
+ *
+ * info at: https://project-osrm.org/docs/v5.5.1/api/#services
+ *
  */
 public struct OSRMQueryMaker {
 
