@@ -59,15 +59,21 @@ public actor OSRMClient {
      * @return Data
      */
     public func fetchData(request: OSRMRequest) async throws -> Data {
-        
-        guard !request.coordinates.isEmpty else { return Data() }
+
+        guard !request.coordinates.isEmpty else {
+            throw APIError.apiError(reason: "No coordinates provided")
+        }
         
         // coordinates
         let coords = request.coordinates.map { "\($0.longitude),\($0.latitude)" }
             .joined(separator: ";")
         
+        let stringUrl = "\(baseurl)/\(request.service.rawValue)/\(request.version)/\(request.profile.rawValue)/\(coords)"
+        
         // base path
-        guard var components = URLComponents(string: "\(baseurl)/\(request.service.rawValue)/\(request.version)/\(request.profile.rawValue)/\(coords)") else { return Data() }
+        guard var components = URLComponents(string: stringUrl) else {
+             throw APIError.apiError(reason: "Bad url: \(stringUrl)")
+         }
         
         let queryItems: [URLQueryItem] = await queryMaker.getQueryItems(for: request)
 
