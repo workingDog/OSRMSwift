@@ -11,7 +11,7 @@ import Foundation
 public struct OSRMRequest: Codable, Identifiable, Sendable {
     public let id = UUID()
     
-    // common to all services
+    // general options
     public let profile: OSRMProfile
     public let coordinates: [OSRMCoordinate]
     public var service: OSRMService

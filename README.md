@@ -24,10 +24,9 @@ that lets you calculate the best way to travel from point A to point B.
 -    **Trip**  
         The trip plugin solves the Traveling Salesman Problem using a greedy heuristic (farthest-insertion algorithm). 
 
-Not yet implemented
-
 -    **Tile** 
-         This service generates Mapbox Vector Tiles that can be viewed with a vector-tile capable slippy-map viewer.
+         Not implemented
+
 
                                                                 
 ### Usage
