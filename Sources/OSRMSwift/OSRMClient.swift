@@ -28,6 +28,9 @@ public enum APIError: Swift.Error, LocalizedError {
 
 /*
  * a network connection to the OSRM API server
+ * info at: https://project-osrm.org/docs/v5.5.1/api/#route-service
+ * urlString: http://router.project-osrm.org/route/v1/driving/13.388860,52.517037;13.397634,52.529407;13.428555,52.523219?overview=false
+ *
  */
 public actor OSRMClient {
     
@@ -64,70 +67,7 @@ public actor OSRMClient {
         // base path
         guard var components = URLComponents(string: "\(baseurl)/\(request.service.rawValue)/\(request.version)/\(request.profile.rawValue)/\(coords)") else { return Data() }
         
-        var queryItems: [URLQueryItem] = [
-            URLQueryItem(name: "steps", value: request.steps ? "true" : "false"),
-            URLQueryItem(name: "geometries", value: request.geometries),
-            URLQueryItem(name: "overview", value: request.overview),
-            URLQueryItem(name: "annotations", value: request.annotations)
-        ]
-        
-        // route only
-        if request.service == .route {
-            if let alternatives = request.alternatives {
-                queryItems.append(URLQueryItem(name: "alternatives", value: alternatives ? "true" : "false"))
-            }
-            
-            if let cs = request.continueStraight {
-                queryItems.append(URLQueryItem(name: "continue_straight", value: cs ? "true" : "false"))
-            }
-        }
-        
-        // match only
-        if request.service == .match {
-            if let tst = request.timestamps {
-                let timestamps = tst.map { "\($0)" }.joined(separator: ";")
-                queryItems.append(URLQueryItem(name: "timestamps", value: timestamps))
-            }
-            
-            if let tidy = request.tidy {
-                queryItems.append(URLQueryItem(name: "tidy", value: tidy ? "true" : "false"))
-            }
-            
-            if let snapping = request.snapping{
-                queryItems.append(URLQueryItem(name: "snapping", value: snapping))
-            }
-            
-            let radiuses = request.coordinates.map { $0.radius != nil ? "\($0.radius!)" : "" }.joined(separator: ";")
-            if radiuses.contains(where: { !$0.isWhitespace }) {
-                queryItems.append(URLQueryItem(name: "radiuses", value: radiuses))
-            }
-        }
-        
-        // nearest only
-        if request.service == .nearest {
-            queryItems.removeAll()
-
-            let radiuses = request.coordinates.map { $0.radius != nil ? "\($0.radius!)" : "" }.joined(separator: ";")
-            if radiuses.contains(where: { !$0.isWhitespace }) {
-                queryItems.append(URLQueryItem(name: "radiuses", value: radiuses))
-            }
-
-            if let number = request.number {
-                queryItems.append(URLQueryItem(name: "number", value: "\(number)"))
-            }
-        }
-        
-        // optional per-coordinate arrays
-        let bearings = request.coordinates.map {
-            if let bearing = $0.bearing {
-                "\(bearing.value),\(bearing.range)"
-            } else {
-                ""
-            }
-        }.joined(separator: ";")
-        if bearings.contains(where: { !$0.isWhitespace }) {
-            queryItems.append(URLQueryItem(name: "bearings", value: bearings))
-        }
+        let queryItems: [URLQueryItem] = await OSRMQuery().getQueryItems(for: request)
 
         components.queryItems = queryItems
         
@@ -141,7 +81,7 @@ public actor OSRMClient {
         do {
             let (data, response) = try await sessionManager.data(for: apiRequest)
             
-   //         print("---> data: \(String(data: data, encoding: .utf8) as AnyObject)\n")
+  //          print("---> data: \(String(data: data, encoding: .utf8) as AnyObject)\n")
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw APIError.unknown
@@ -242,5 +182,24 @@ public actor OSRMClient {
             return nil
         }
     }
-   
+    
+    /*
+     * fetch table service from the server.
+     * The server OSRMTableResponse is returned.
+     *
+     * @request the OSRMRequest
+     * @return OSRMTableResponse?
+     */
+    @MainActor
+    public func fetchTable(request: OSRMRequest) async throws -> OSRMTableResponse? {
+        do {
+            let data = try await fetchData(request: request)
+            let response: OSRMTableResponse = try JSONDecoder().decode(OSRMTableResponse.self, from: data)
+            return response
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
 }

@@ -19,7 +19,8 @@ public struct OSRMRequest: Codable, Identifiable, Sendable {
     public var steps: Bool
     public var geometries: String     // "polyline", "polyline6", "geojson"
     public var overview: String       // "simplified", "full", "false"
-    public var annotations: String?   // true or false
+    public var annotations: String?   // true or false, duration, distance
+                                      // or "duration,distance"
     
     // route
     public var alternatives: Bool?
@@ -36,11 +37,23 @@ public struct OSRMRequest: Codable, Identifiable, Sendable {
     // nearest
     public var number: Int?
     
+    // table
+    public var sources: [Int]?
+    public var destinations: [Int]?
+    public var fallbackSpeed: Double?
+    public var fallbackCoordinate: String?  // input (default), or snapped
+    public var scaleFactor: Double?
+
     enum CodingKeys: String, CodingKey {
-        case profile, coordinates, version, service, timestamps, steps, geometries, overview, annotations, radiuses, tidy, snapping, exclude, alternatives, continueStraight, number
+        case profile, coordinates, version, service, timestamps, steps, geometries, overview, annotations, radiuses, tidy, snapping, exclude, alternatives, continueStraight
+        case number
+        case sources, destinations
+        case fallbackSpeed = "fallback_speed"
+        case fallbackCoordinate = "fallback_coordinate"
+        case scaleFactor = "scale_factor"
     }
     
-    public init(profile: OSRMProfile, coordinates: [OSRMCoordinate], service: OSRMService, version: String = "v1", steps: Bool = false, geometries: String = "polyline", overview: String = "simplified", annotations: String? = nil, alternatives: Bool? = nil, continueStraight: Bool? = nil, timestamps: [Int]? = nil, radiuses: [Double]? = nil, tidy: Bool? = nil, snapping: String? = nil, exclude: [String]? = nil, number: Int? = nil) {
+    public init(profile: OSRMProfile, coordinates: [OSRMCoordinate], service: OSRMService, version: String = "v1", steps: Bool = false, geometries: String = "polyline", overview: String = "simplified", annotations: String? = nil, alternatives: Bool? = nil, continueStraight: Bool? = nil, timestamps: [Int]? = nil, radiuses: [Double]? = nil, tidy: Bool? = nil, snapping: String? = nil, exclude: [String]? = nil, number: Int? = nil, sources: [Int]? = nil, destinations: [Int]? = nil, fallbackSpeed: Double? = nil, fallbackCoordinate: String? = nil, scaleFactor: Double? = nil) {
         self.profile = profile
         self.coordinates = coordinates
         self.service = service
@@ -57,7 +70,13 @@ public struct OSRMRequest: Codable, Identifiable, Sendable {
         self.snapping = snapping
         self.exclude = exclude
         self.number = number
+        self.sources = sources
+        self.destinations = destinations
+        self.fallbackSpeed = fallbackSpeed
+        self.fallbackCoordinate = fallbackCoordinate
+        self.scaleFactor = scaleFactor
     }
+
 }
 
 // MARK: - Supported travel profiles
@@ -112,4 +131,3 @@ public struct OSRMBearing: Codable, Identifiable, Sendable {
 public enum OSRMService: String, Codable, Sendable {
     case route, table, nearest, match, trip, tile
 }
-

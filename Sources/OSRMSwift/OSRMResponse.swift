@@ -86,6 +86,33 @@ public struct OSRMNearestResponse: Codable, Identifiable, Sendable {
     }
 }
 
+// MARK: - OSRMTableResponse
+public struct OSRMTableResponse: Codable, Identifiable, Sendable {
+    public let id = UUID()
+    
+    public let code: String
+    public let durations: [[Double?]]
+    public let distance: Double?
+    public let sources: [OSRMPoint]
+    public let destinations: [OSRMPoint]
+    public let fallbackSpeedCells: [Int]?
+    
+    enum CodingKeys: String, CodingKey {
+        case code, durations, distance, sources, destinations
+        case fallbackSpeedCells = "fallback_speed_cells"
+    }
+    
+public init(code: String, durations: [[Double?]], distance: Double?, sources: [OSRMPoint], destinations: [OSRMPoint], fallbackSpeedCells: [Int]? = nil) {
+        self.code = code
+        self.durations = durations
+        self.distance = distance
+        self.sources = sources
+        self.destinations = destinations
+        self.fallbackSpeedCells = fallbackSpeedCells
+    }
+    
+}
+
 // MARK: - OSRMRoute
 public struct OSRMRoute: Codable, Identifiable, Sendable {
     public let id = UUID()
@@ -309,4 +336,3 @@ public struct OSRMPoint: Codable, Identifiable, Sendable {
         return CLLocationCoordinate2D(latitude: location[1], longitude: location[0])
     }
 }
-
