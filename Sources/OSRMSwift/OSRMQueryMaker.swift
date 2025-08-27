@@ -13,7 +13,7 @@ import Foundation
  * info at: https://project-osrm.org/docs/v5.5.1/api/#services
  *
  */
-public struct OSRMQueryMaker {
+public struct OSRMQueryMaker: Sendable {
 
     public func getQueryItems(for request: OSRMRequest) -> [URLQueryItem] {
         
