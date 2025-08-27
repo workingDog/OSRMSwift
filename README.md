@@ -106,7 +106,7 @@ Using the @Observable data model OSRMDataModel
 ```swift
 
 struct ContentView: View {
-    let osrmProvider = OSRMDataModel()
+    let osrm = OSRMDataModel()
  
     @State private var cameraPosition: MapCameraPosition = .region(MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 52.517037, longitude: 13.388860),
@@ -115,7 +115,7 @@ struct ContentView: View {
     
     var body: some View {
         Map(position: $cameraPosition) {
-            if let response = osrmProvider.routeResponse {
+            if let response = osrm.routeResponse {
                 ForEach(response.routes) { route in
                     MapPolyline(coordinates: route.geometry.coordinates2D)
                         .stroke(.blue, lineWidth: 8)
@@ -146,7 +146,7 @@ struct ContentView: View {
                 continueStraight: true
             )
 
-            await osrmProvider.getOSRMResponse(for: request)
+            await osrm.getOSRMResponse(for: request)
         }
     }
 }
