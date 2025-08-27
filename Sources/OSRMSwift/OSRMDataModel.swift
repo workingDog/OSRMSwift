@@ -18,7 +18,7 @@ import SwiftUI
 public final class OSRMDataModel {
     
     @ObservationIgnored
-    let client = OSRMClient()
+    let client: OSRMClient
     
     public var routeResponse: OSRMRouteResponse?
     public var matchResponse: OSRMMatchResponse?
@@ -26,7 +26,9 @@ public final class OSRMDataModel {
     public var nearestResponse: OSRMNearestResponse?
     public var tableResponse: OSRMTableResponse?
     
-    public init(){ }
+    public init(urlString: String = "https://router.project-osrm.org") {
+        self.client = OSRMClient(urlString: urlString)
+    }
     
     /// the main function to retrieve and update the appropriate response
     public func getOSRMResponse(for request: OSRMRequest) async {
