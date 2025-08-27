@@ -75,9 +75,7 @@ public actor OSRMClient {
              throw APIError.apiError(reason: "Bad url: \(stringUrl)")
          }
         
-        let queryItems: [URLQueryItem] = await queryMaker.getQueryItems(for: request)
-
-        components.queryItems = queryItems
+        components.queryItems = await queryMaker.getQueryItems(for: request)
         
         var apiRequest = URLRequest(url: components.url!)
         apiRequest.httpMethod = "GET"
