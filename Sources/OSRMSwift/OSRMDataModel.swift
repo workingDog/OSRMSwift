@@ -1,5 +1,5 @@
 //
-//  OSRMProvider.swift
+//  OSRMDataModel.swift
 //  OSRMSwift
 //
 //  Created by Ringo Wathelet on 2025/08/26.
@@ -15,7 +15,7 @@ import SwiftUI
  */
 @Observable
 @MainActor
-public final class OSRMProvider {
+public final class OSRMDataModel {
     
     @ObservationIgnored
     let client = OSRMClient()

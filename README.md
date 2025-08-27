@@ -101,12 +101,12 @@ struct ContentView: View {
 
 ### SwiftUI data model
 
-Using the @Observable data model OSRMProvider
+Using the @Observable data model OSRMDataModel
 
 ```swift
 
 struct ContentView: View {
-    let osrmProvider = OSRMProvider()
+    let osrmProvider = OSRMDataModel()
  
     @State private var cameraPosition: MapCameraPosition = .region(MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 52.517037, longitude: 13.388860),
