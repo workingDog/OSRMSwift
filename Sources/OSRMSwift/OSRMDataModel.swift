@@ -17,7 +17,6 @@ import SwiftUI
 @MainActor
 public final class OSRMDataModel {
     
-    @ObservationIgnored
     let client: OSRMClient
     
     public var routeResponse: OSRMRouteResponse?
