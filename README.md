@@ -5,7 +5,7 @@
 It delivers map data from **OpenStreetMap** through various services 
 that lets you calculate the best way to travel from point A to point B.
 
-**OSRMSwift** is a lightweight Swift library for connecting to an [OSRM API](https://router.project-osrm.org) server and retrieve responses from its services.
+**OSRMSwift** is a lightweight Swift library for connecting to an [OSRM API](https://project-osrm.org/docs/v5.5.1/api/#general-options) server and retrieving responses from its services.
 
 ### Services
 
