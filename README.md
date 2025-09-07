@@ -2,8 +2,7 @@
 
 [OSRM](https://project-osrm.org/docs/v5.5.1/api/#general-options) (Open Source Routing Machine) is a routing engine made available through an HTTP API.
 
-It delivers map data from **OpenStreetMap** through various services 
-that lets you calculate the best way to travel from point A to point B.
+It provides map data from **OpenStreetMap** via different services, allowing you to calculate the optimal route between point A and point B for travel modes such as driving, walking, or cycling.
 
 **OSRMSwift** is a lightweight Swift library for connecting to an [OSRM API](https://project-osrm.org/docs/v5.5.1/api/#general-options) server and retrieving responses from its services.
 
