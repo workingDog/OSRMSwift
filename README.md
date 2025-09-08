@@ -53,7 +53,7 @@ struct ContentView: View {
     @State private var response: OSRMRouteResponse?
     
     @State private var cameraPosition: MapCameraPosition = .region(MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 52.517037, longitude: 13.388860),
+        center: CLLocationCoordinate2D(latitude: 52.517037, longitude: 13.41),
         span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
     ))
     
@@ -78,7 +78,8 @@ struct ContentView: View {
                     OSRMCoordinate(lat: 52.517037, lon: 13.388860,
                                    bearing: OSRMBearing(value: 90, range: 20),
                                    radius: 50),
-                    OSRMCoordinate(lat: 52.529407, lon: 13.397634)
+                    OSRMCoordinate(lat: 52.529407, lon: 13.397634),
+                    OSRMCoordinate(lat: 52.523219, lon: 13.428555)
                 ],
                 service: .route,
                 steps: true,
@@ -108,7 +109,7 @@ struct ContentView: View {
     let osrm = OSRMDataModel()
  
     @State private var cameraPosition: MapCameraPosition = .region(MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 52.517037, longitude: 13.388860),
+        center: CLLocationCoordinate2D(latitude: 52.517037, longitude: 13.41),
         span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
     ))
     
@@ -133,10 +134,10 @@ struct ContentView: View {
                     OSRMCoordinate(lat: 52.517037, lon: 13.388860,
                                    bearing: OSRMBearing(value: 90, range: 20),
                                    radius: 50),
-                    OSRMCoordinate(lat: 52.529407, lon: 13.397634)
+                    OSRMCoordinate(lat: 52.529407, lon: 13.397634),
+                    OSRMCoordinate(lat: 52.523219, lon: 13.428555)
                 ],
                 service: .route,
-                version: "v1",
                 steps: true,
                 geometries: "geojson",
                 overview: "full",

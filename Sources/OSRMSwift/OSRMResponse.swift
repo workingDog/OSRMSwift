@@ -111,6 +111,14 @@ public init(code: String, durations: [[Double?]], distance: Double?, sources: [O
         self.fallbackSpeedCells = fallbackSpeedCells
     }
     
+    public var sourcesCoordinates2D: [CLLocationCoordinate2D] {
+        sources.compactMap { $0.coordinates2D }
+    }
+    
+    public var destinationsCoordinates2D: [CLLocationCoordinate2D] {
+        destinations.compactMap { $0.coordinates2D }
+    }
+    
 }
 
 // MARK: - OSRMRoute
