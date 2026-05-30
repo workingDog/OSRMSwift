@@ -343,4 +343,22 @@ public struct OSRMPoint: Codable, Identifiable, Sendable {
         guard location.count == 2 else { return nil }
         return CLLocationCoordinate2D(latitude: location[1], longitude: location[0])
     }
+    
+}
+
+// MARK: - OSRMError
+public struct OSRMError: Codable, Identifiable, Sendable {
+    public let id = UUID()
+    
+    public let message: String?
+    public let code: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case message, code
+    }
+    
+    public init(message: String?, code: String?) {
+        self.message = message
+        self.code = code
+    }
 }

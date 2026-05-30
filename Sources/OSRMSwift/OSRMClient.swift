@@ -77,23 +77,30 @@ public actor OSRMClient {
         do {
             let (data, response) = try await sessionManager.data(for: request)
             
-            //   print("---> data: \(String(data: data, encoding: .utf8) as AnyObject)")
+             //  print("---> data: \(String(data: data, encoding: .utf8) as AnyObject)")
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw APIError.unknown
             }
             
-            if (httpResponse.statusCode == 400) {
-                throw APIError.apiError(reason: "Error")
+            if httpResponse.statusCode == 200 {
+                return data
             }
-            if (500..<600 ~= httpResponse.statusCode) {
-                throw APIError.apiError(reason: "Server error")
+
+            let message: String = {
+                if let error = try? JSONDecoder().decode(OSRMError.self, from: data) {
+                    if let code = error.code, let msg = error.message {
+                        return "\(code): \(msg)"
+                    }
+                }
+                return String(data: data, encoding: .utf8) ?? "Unknown error"
+            }()
+
+            switch httpResponse.statusCode {
+                case 400: throw APIError.apiError(reason: message)
+                case 500..<600: throw APIError.apiError(reason: "Server error: \(message)")
+                default: throw APIError.networkError(from: URLError(.badServerResponse))
             }
-            if (httpResponse.statusCode != 200) {
-                throw APIError.networkError(from: URLError(.badServerResponse))
-            }
-            
-            return data
         }
         catch let error as APIError {
             throw error
@@ -229,3 +236,4 @@ public actor OSRMClient {
     }
     
 }
+

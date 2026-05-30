@@ -63,7 +63,7 @@ public struct OSRMQueryMaker: Sendable {
     }
     
     public func getTripQuery(for request: OSRMRequest) -> [URLQueryItem] {
-        var queryItems: [URLQueryItem] = getGeneralOptions(for: request)
+        let queryItems: [URLQueryItem] = getGeneralOptions(for: request)
         
         return queryItems
     }
