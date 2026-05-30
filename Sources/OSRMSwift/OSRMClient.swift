@@ -8,20 +8,17 @@ import Foundation
 
 
 /*
- * represents an error during a connection
+ * error during a connection
  */
 public enum APIError: Swift.Error, LocalizedError {
     
     case unknown, apiError(reason: String), parserError(reason: String), networkError(from: URLError)
     
     public var errorDescription: String? {
-        switch self {
-        case .unknown:
-            return "Unknown error"
-        case .apiError(let reason), .parserError(let reason):
-            return reason
-        case .networkError(let from):
-            return from.localizedDescription
+        return switch self {
+            case .unknown:  "Unknown error"
+            case .apiError(let reason), .parserError(let reason): reason
+            case .networkError(let from): from.localizedDescription
         }
     }
 }
@@ -35,14 +32,21 @@ public enum APIError: Swift.Error, LocalizedError {
 public actor OSRMClient {
     
     let queryMaker = OSRMQueryMaker()
+
+    public let sessionManager: URLSession
+    public let acceptType: String
+    public let contentType: String
+    public let userAgent: String
     
-    public var sessionManager: URLSession
-    public var acceptType = "application/json; charset=utf-8"
-    public var contentType = "application/json; charset=utf-8"
-    public var baseurl = "https://router.project-osrm.org/"
-    
-    public init(urlString: String = "https://router.project-osrm.org") {
-        self.baseurl = urlString
+    private let baseURL: URL
+
+    public init(baseURL: URL = URL(string: "https://router.project-osrm.org")!) {
+        self.baseURL = baseURL
+
+        self.acceptType = "application/json; charset=utf-8"
+        self.contentType = "application/json; charset=utf-8"
+        self.userAgent = "OSRMSwift"
+
         self.sessionManager = {
             let configuration = URLSessionConfiguration.default
             configuration.timeoutIntervalForRequest = 30  // seconds
@@ -55,39 +59,25 @@ public actor OSRMClient {
      * fetch data from the server.
      * The server response Data is returned.
      *
-     * @request the OSRMRequest
+     * @components URLComponents
      * @return Data
      */
-    public func fetchData(request: OSRMRequest) async throws -> Data {
-
-        guard !request.coordinates.isEmpty else {
-            throw APIError.apiError(reason: "No coordinates provided")
+    private func fetchData(components: URLComponents) async throws -> Data {
+        
+        guard let _ = components.url else {
+            throw APIError.apiError(reason: "Unable to create URL components")
         }
         
-        // coordinates
-        let coords = request.coordinates.map { "\($0.longitude),\($0.latitude)" }
-            .joined(separator: ";")
-        
-        let stringUrl = "\(baseurl)/\(request.service.rawValue)/\(request.version)/\(request.profile.rawValue)/\(coords)"
-        
-        // base path
-        guard var components = URLComponents(string: stringUrl) else {
-             throw APIError.apiError(reason: "Bad url: \(stringUrl)")
-         }
-        
-        components.queryItems = await queryMaker.getQueryItems(for: request)
-        
-        var apiRequest = URLRequest(url: components.url!)
-        apiRequest.httpMethod = "GET"
-        apiRequest.addValue(acceptType, forHTTPHeaderField: "Accept")
-        apiRequest.addValue(contentType, forHTTPHeaderField: "Content-Type")
-        
-  //      print("---> components.url: \(components.url!) \n")
-        
+        var request = URLRequest(url: components.url!)
+        request.httpMethod = "GET"
+        request.addValue(acceptType, forHTTPHeaderField: "Accept")
+        request.addValue(contentType, forHTTPHeaderField: "Content-Type")
+        request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+
         do {
-            let (data, response) = try await sessionManager.data(for: apiRequest)
+            let (data, response) = try await sessionManager.data(for: request)
             
-  //          print("---> data: \(String(data: data, encoding: .utf8) as AnyObject)\n")
+            //   print("---> data: \(String(data: data, encoding: .utf8) as AnyObject)")
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw APIError.unknown
@@ -114,6 +104,36 @@ public actor OSRMClient {
     }
     
     /*
+     * returns a URLComponents given the path
+     */
+    private func makeComponents(path: String? = nil) -> URLComponents {
+        var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
+        if let path {
+            components.path = path
+        }
+        return components
+    }
+    
+    public func fetchRequestData(request: OSRMRequest) async throws -> Data {
+
+        guard !request.coordinates.isEmpty else {
+            throw APIError.apiError(reason: "No coordinates provided")
+        }
+        
+        // coordinates
+        let coords = request.coordinates.map { "\($0.longitude),\($0.latitude)" }
+            .joined(separator: ";")
+        
+        let pathString = "/\(request.service.rawValue)/\(request.version)/\(request.profile.rawValue)/\(coords)"
+        
+        var components = makeComponents(path: pathString)
+
+        components.queryItems = queryMaker.getQueryItems(for: request)
+        
+        return try await fetchData(components: components)
+    }
+    
+    /*
      * fetch route service from the server.
      * The server response OSRMRouteResponse is returned.
      *
@@ -123,7 +143,7 @@ public actor OSRMClient {
     @MainActor
     public func fetchRoute(request: OSRMRequest) async throws -> OSRMRouteResponse? {
         do {
-            let data = try await fetchData(request: request)
+            let data = try await fetchRequestData(request: request)
             let response: OSRMRouteResponse = try JSONDecoder().decode(OSRMRouteResponse.self, from: data)
             return response
         } catch {
@@ -142,7 +162,7 @@ public actor OSRMClient {
     @MainActor
     public func fetchMatch(request: OSRMRequest) async throws -> OSRMMatchResponse? {
         do {
-            let data = try await fetchData(request: request)
+            let data = try await fetchRequestData(request: request)
             let response: OSRMMatchResponse = try JSONDecoder().decode(OSRMMatchResponse.self, from: data)
             return response
         } catch {
@@ -161,7 +181,7 @@ public actor OSRMClient {
     @MainActor
     public func fetchTrip(request: OSRMRequest) async throws -> OSRMTripResponse? {
         do {
-            let data = try await fetchData(request: request)
+            let data = try await fetchRequestData(request: request)
             let response: OSRMTripResponse = try JSONDecoder().decode(OSRMTripResponse.self, from: data)
             return response
         } catch {
@@ -180,7 +200,7 @@ public actor OSRMClient {
     @MainActor
     public func fetchNearest(request: OSRMRequest) async throws -> OSRMNearestResponse? {
         do {
-            let data = try await fetchData(request: request)
+            let data = try await fetchRequestData(request: request)
             let response: OSRMNearestResponse = try JSONDecoder().decode(OSRMNearestResponse.self, from: data)
             return response
         } catch {
@@ -199,7 +219,7 @@ public actor OSRMClient {
     @MainActor
     public func fetchTable(request: OSRMRequest) async throws -> OSRMTableResponse? {
         do {
-            let data = try await fetchData(request: request)
+            let data = try await fetchRequestData(request: request)
             let response: OSRMTableResponse = try JSONDecoder().decode(OSRMTableResponse.self, from: data)
             return response
         } catch {

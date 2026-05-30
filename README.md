@@ -152,10 +152,6 @@ struct ContentView: View {
 }
 ```
 
-
-
-
-
 ### Request
 
 The structure of various requests are described at [OSRM](https://project-osrm.org/docs/v5.5.1/api/#general-options) 

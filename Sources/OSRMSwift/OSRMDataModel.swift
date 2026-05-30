@@ -25,8 +25,9 @@ public final class OSRMDataModel {
     public var nearestResponse: OSRMNearestResponse?
     public var tableResponse: OSRMTableResponse?
     
-    public init(urlString: String = "https://router.project-osrm.org") {
-        self.client = OSRMClient(urlString: urlString)
+
+    public init(baseURL: URL = URL(string: "https://router.project-osrm.org")!) {
+        self.client = OSRMClient(baseURL: baseURL)
     }
     
     /// the main function to retrieve and update the appropriate response
